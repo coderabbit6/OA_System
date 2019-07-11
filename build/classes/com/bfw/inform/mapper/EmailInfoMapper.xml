@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.inform.mapper.EmailInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.EmailInfo" >
+    <id column="email_id" property="emailId" jdbcType="INTEGER" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="email_title" property="emailTitle" jdbcType="VARCHAR" />
+    <result column="email_content" property="emailContent" jdbcType="VARCHAR" />
+    <result column="email_time" property="emailTime" jdbcType="TIMESTAMP" />
+    <result column="email_man" property="emailMan" jdbcType="VARCHAR" />
+    <result column="email_addr" property="emailAddr" jdbcType="VARCHAR" />
+    <result column="email_state" property="emailState" jdbcType="VARCHAR" />
+    <result column="staff_name" property="staffName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    email_id, staff_id, email_title, email_content, email_time, email_man, email_addr, 
+    email_state
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+   
+   	select a.*,b.staff_name 
+
+	from  email_info  a,staff_info b 
+	
+	where  a.staff_id = b.staff_id and a.email_id = #{emailId,jdbcType=INTEGER}
+
+  </select>
+  
+    <select id="getEmailList" resultMap="BaseResultMap" parameterType="com.bfw.po.EmailInfo" >
+   	select a.*,b.staff_name 
+
+	from  email_info  a,staff_info b 
+	
+	where  a.staff_id = b.staff_id 
+	<if test="emailTitle!=null and emailTitle!=''">
+	  and	a.email_title like  #{emailTitle} 
+	</if>
+
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from email_info
+    where email_id = #{emailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bfw.po.EmailInfo" >
+    insert into email_info (email_id, staff_id, email_title, 
+      email_content, email_time, email_man, 
+      email_addr, email_state)
+    values (#{emailId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}, #{emailTitle,jdbcType=VARCHAR}, 
+      #{emailContent,jdbcType=VARCHAR}, #{emailTime,jdbcType=TIMESTAMP}, #{emailMan,jdbcType=VARCHAR}, 
+      #{emailAddr,jdbcType=VARCHAR}, #{emailState,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.EmailInfo" >
+    insert into email_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="emailId != null" >
+        email_id,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="emailTitle != null" >
+        email_title,
+      </if>
+      <if test="emailContent != null" >
+        email_content,
+      </if>
+      <if test="emailTime != null" >
+        email_time,
+      </if>
+      <if test="emailMan != null" >
+        email_man,
+      </if>
+      <if test="emailAddr != null" >
+        email_addr,
+      </if>
+      <if test="emailState != null" >
+        email_state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="emailId != null" >
+        #{emailId,jdbcType=INTEGER},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="emailTitle != null" >
+        #{emailTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="emailContent != null" >
+        #{emailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="emailTime != null" >
+        #{emailTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emailMan != null" >
+        #{emailMan,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddr != null" >
+        #{emailAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="emailState != null" >
+        #{emailState,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.EmailInfo" >
+    update email_info
+    <set >
+      <if test="staffId != null" >
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="emailTitle != null" >
+        email_title = #{emailTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="emailContent != null" >
+        email_content = #{emailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="emailTime != null" >
+        email_time = #{emailTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emailMan != null" >
+        email_man = #{emailMan,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddr != null" >
+        email_addr = #{emailAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="emailState != null" >
+        email_state = #{emailState,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where email_id = #{emailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.EmailInfo" >
+    update email_info
+    set staff_id = #{staffId,jdbcType=INTEGER},
+      email_title = #{emailTitle,jdbcType=VARCHAR},
+      email_content = #{emailContent,jdbcType=VARCHAR},
+      email_time = #{emailTime,jdbcType=TIMESTAMP},
+      email_man = #{emailMan,jdbcType=VARCHAR},
+      email_addr = #{emailAddr,jdbcType=VARCHAR},
+      email_state = #{emailState,jdbcType=VARCHAR}
+    where email_id = #{emailId,jdbcType=INTEGER}
+  </update>
+</mapper>

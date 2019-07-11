@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.inform.mapper.MessafeInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.MessafeInfo" >
+    <id column="messafe_id" property="messafeId" jdbcType="INTEGER" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="messafe_content" property="messafeContent" jdbcType="VARCHAR" />
+    <result column="messafe_man" property="messafeMan" jdbcType="VARCHAR" />
+    <result column="messafe_phone" property="messafePhone"  />
+    <result column="messafe_time" property="messafeTime" jdbcType="TIMESTAMP" />
+    <result column="messafe_state" property="messafeState" jdbcType="VARCHAR" />
+     <result column="staff_name" property="staffName"  />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    messafe_id, staff_id, messafe_content, messafe_man, messafe_phone, messafe_time, 
+    messafe_state
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select a.*,b.staff_name
+    from messafe_info a,staff_info b
+    where a.staff_id = b.staff_id
+    and a.messafe_id = #{messafeId,jdbcType=INTEGER}
+  </select>
+  
+    <select id="getMessafeInfoList" resultMap="BaseResultMap" parameterType="com.bfw.po.MessafeInfo" >
+    select a.*,b.staff_name
+    from messafe_info a,staff_info b
+    where a.staff_id = b.staff_id
+    
+    	<if test="messafePhone!=null">
+    	 and a.messafe_phone = #{messafePhone}
+    	</if>
+  
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from messafe_info
+    where messafe_id = #{messafeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bfw.po.MessafeInfo" >
+    insert into messafe_info (messafe_id, staff_id, messafe_content, 
+      messafe_man, messafe_phone, messafe_time, 
+      messafe_state)
+    values (#{messafeId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}, #{messafeContent,jdbcType=VARCHAR}, 
+      #{messafeMan,jdbcType=VARCHAR}, #{messafePhone,jdbcType=INTEGER}, #{messafeTime,jdbcType=TIMESTAMP}, 
+      #{messafeState,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.MessafeInfo" >
+    insert into messafe_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messafeId != null" >
+        messafe_id,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="messafeContent != null" >
+        messafe_content,
+      </if>
+      <if test="messafeMan != null" >
+        messafe_man,
+      </if>
+      <if test="messafePhone != null" >
+        messafe_phone,
+      </if>
+      <if test="messafeTime != null" >
+        messafe_time,
+      </if>
+      <if test="messafeState != null" >
+        messafe_state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messafeId != null" >
+        #{messafeId,jdbcType=INTEGER},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="messafeContent != null" >
+        #{messafeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="messafeMan != null" >
+        #{messafeMan,jdbcType=VARCHAR},
+      </if>
+      <if test="messafePhone != null" >
+        #{messafePhone,jdbcType=INTEGER},
+      </if>
+      <if test="messafeTime != null" >
+        #{messafeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messafeState != null" >
+        #{messafeState,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.MessafeInfo" >
+    update messafe_info
+    <set >
+      <if test="staffId != null" >
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="messafeContent != null" >
+        messafe_content = #{messafeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="messafeMan != null" >
+        messafe_man = #{messafeMan,jdbcType=VARCHAR},
+      </if>
+      <if test="messafePhone != null" >
+        messafe_phone = #{messafePhone,jdbcType=INTEGER},
+      </if>
+      <if test="messafeTime != null" >
+        messafe_time = #{messafeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messafeState != null" >
+        messafe_state = #{messafeState,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where messafe_id = #{messafeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.MessafeInfo" >
+    update messafe_info
+    set staff_id = #{staffId,jdbcType=INTEGER},
+      messafe_content = #{messafeContent,jdbcType=VARCHAR},
+      messafe_man = #{messafeMan,jdbcType=VARCHAR},
+      messafe_phone = #{messafePhone,jdbcType=INTEGER},
+      messafe_time = #{messafeTime,jdbcType=TIMESTAMP},
+      messafe_state = #{messafeState,jdbcType=VARCHAR}
+    where messafe_id = #{messafeId,jdbcType=INTEGER}
+  </update>
+</mapper>

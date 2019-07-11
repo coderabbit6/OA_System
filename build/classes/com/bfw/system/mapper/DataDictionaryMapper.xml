@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.system.mapper.DataDictionaryMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.DataDictionary" >
+    <id column="data_id" property="dataId" jdbcType="INTEGER" />
+    <result column="data_content" property="dataContent" jdbcType="VARCHAR" />
+    <!-- <result column="data_type" property="dataType" jdbcType="VARCHAR" />
+    <result column="data_desc" property="dataDesc" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    data_id, data_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from data_dictionary
+    where data_id = #{dataId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询多条记录 -->
+  <select id="getDataList" resultMap="BaseResultMap" parameterType="com.bfw.po.DataDictionary" >
+    select 
+    <include refid="Base_Column_List" />
+    from data_dictionary
+   	<where>
+   		<if test="dataContent!=null and dataContent!=''">
+   		    data_content like CONCAT('%' ,#{dataContent,jdbcType=VARCHAR},'%')
+   		</if>
+   	</where>
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from data_dictionary
+    where data_id = #{dataId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bfw.po.DataDictionary" >
+    insert into data_dictionary (data_id, data_content)
+    values (#{dataId,jdbcType=INTEGER}, #{dataContent,jdbcType=VARCHAR}
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.DataDictionary" >
+    insert into data_dictionary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dataId != null" >
+        data_id,
+      </if>
+      <if test="dataContent != null" >
+        data_content,
+      </if>
+<!--       <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="dataDesc != null" >
+        data_desc,
+      </if> -->
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dataId != null" >
+        #{dataId,jdbcType=INTEGER},
+      </if>
+      <if test="dataContent != null" >
+        #{dataContent,jdbcType=VARCHAR},
+      </if>
+<!--       <if test="dataType != null" >
+        #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataDesc != null" >
+        #{dataDesc,jdbcType=VARCHAR},
+      </if> -->
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.DataDictionary" >
+    update data_dictionary
+    <set >
+      <if test="dataContent != null" >
+        data_content = #{dataContent,jdbcType=VARCHAR},
+      </if>
+<!--       <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataDesc != null" >
+        data_desc = #{dataDesc,jdbcType=VARCHAR},
+      </if> -->
+    </set>
+    where data_id = #{dataId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.DataDictionary" >
+    update data_dictionary
+    set data_content = #{dataContent,jdbcType=VARCHAR},
+<!--       data_type = #{dataType,jdbcType=VARCHAR},
+      data_desc = #{dataDesc,jdbcType=VARCHAR} -->
+    where data_id = #{dataId,jdbcType=INTEGER}
+  </update>
+</mapper>

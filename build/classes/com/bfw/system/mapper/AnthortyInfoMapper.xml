@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.system.mapper.AnthortyInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.AnthortyInfo" >
+    <id column="anthorty_id" property="anthortyId" jdbcType="INTEGER" />
+    <result column="anthorty_pid" property="anthortyPid" jdbcType="INTEGER" />
+    <result column="anthorty_name" property="anthortyName" jdbcType="VARCHAR" />
+    <result column="anthorty_desc" property="anthortyDesc" jdbcType="VARCHAR" />
+    <result column="anthorty_url" property="anthortyUrl" jdbcType="VARCHAR" />
+     <result column="panthorty_name" property="panthortyName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    anthorty_id, anthorty_pid, anthorty_name, anthorty_desc, anthorty_url
+  </sql>
+  
+  <select id="getAnthortyByRoleIdList" parameterType="com.bfw.po.AnthortyInfo" resultMap="BaseResultMap">
+  
+  select * from anthorty_info where anthorty_id in ( select anthorty_id  from role_anthority_info where role_id=#{roleId})
+  </select>
+  
+  <select id="getAnthortyInfoList" parameterType="com.bfw.po.AnthortyInfo" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from anthorty_info
+    
+    <if test="anthortyId!=null and anthortyId!=''">
+    	where anthorty_pid = #{anthortyId}
+    </if>	
+  
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+ 
+select a.*,(  select   anthorty_name from anthorty_info 
+where  anthorty_id = 
+(select anthorty_pid from anthorty_info where  anthorty_id = #{anthortyId,jdbcType=INTEGER}  ))
+  as panthorty_name
+
+from anthorty_info a
+
+where a.anthorty_id =#{anthortyId,jdbcType=INTEGER}
+ 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from anthorty_info
+    where anthorty_id = #{anthortyId,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.bfw.po.AnthortyInfo" >
+    insert into anthorty_info (anthorty_id, anthorty_pid, anthorty_name, 
+      anthorty_desc, anthorty_url)
+    values (#{anthortyId,jdbcType=INTEGER}, #{anthortyPid,jdbcType=INTEGER}, #{anthortyName,jdbcType=VARCHAR}, 
+      #{anthortyDesc,jdbcType=VARCHAR}, #{anthortyUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.AnthortyInfo" >
+    insert into anthorty_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="anthortyId != null" >
+        anthorty_id,
+      </if>
+      <if test="anthortyPid != null" >
+        anthorty_pid,
+      </if>
+      <if test="anthortyName != null" >
+        anthorty_name,
+      </if>
+      <if test="anthortyDesc != null" >
+        anthorty_desc,
+      </if>
+      <if test="anthortyUrl != null" >
+        anthorty_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="anthortyId != null" >
+        #{anthortyId,jdbcType=INTEGER},
+      </if>
+      <if test="anthortyPid != null" >
+        #{anthortyPid,jdbcType=INTEGER},
+      </if>
+      <if test="anthortyName != null" >
+        #{anthortyName,jdbcType=VARCHAR},
+      </if>
+      <if test="anthortyDesc != null" >
+        #{anthortyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="anthortyUrl != null" >
+        #{anthortyUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.AnthortyInfo" >
+    update anthorty_info
+    <set >
+      <if test="anthortyPid != null" >
+        anthorty_pid = #{anthortyPid,jdbcType=INTEGER},
+      </if>
+      <if test="anthortyName != null" >
+        anthorty_name = #{anthortyName,jdbcType=VARCHAR},
+      </if>
+      <if test="anthortyDesc != null" >
+        anthorty_desc = #{anthortyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="anthortyUrl != null" >
+        anthorty_url = #{anthortyUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where anthorty_id = #{anthortyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.AnthortyInfo" >
+    update anthorty_info
+    set anthorty_pid = #{anthortyPid,jdbcType=INTEGER},
+      anthorty_name = #{anthortyName,jdbcType=VARCHAR},
+      anthorty_desc = #{anthortyDesc,jdbcType=VARCHAR},
+      anthorty_url = #{anthortyUrl,jdbcType=VARCHAR}
+    where anthorty_id = #{anthortyId,jdbcType=INTEGER}
+  </update>
+</mapper>

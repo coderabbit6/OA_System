@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.inform.mapper.TemplateInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.TemplateInfo" >
+    <id column="template_id" property="templateId" jdbcType="INTEGER" />
+    <result column="template_title" property="templateTitle" jdbcType="VARCHAR" />
+    <result column="template_content" property="templateContent" jdbcType="VARCHAR" />
+    <result column="template_type" property="templateType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    template_id, template_title, template_content, template_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from template_info
+    where template_id = #{templateId,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  <select id="getTemplateList" resultMap="BaseResultMap" parameterType="com.bfw.po.TemplateInfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from template_info
+    	<where>
+    	     <if test="templateTitle != null and templateTitle!=''" >
+        		and template_title like #{templateTitle}
+     		 </if>
+     		 <if test="templateType != null and templateType!=''" >
+		      and    template_type=#{templateType}
+		     </if>
+    	</where>
+  
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from template_info
+    where template_id = #{templateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bfw.po.TemplateInfo" >
+    insert into template_info (template_id, template_title, template_content, 
+      template_type)
+    values (#{templateId,jdbcType=INTEGER}, #{templateTitle,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR}, 
+      #{templateType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.TemplateInfo" >
+    insert into template_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="templateId != null" >
+        template_id,
+      </if>
+      <if test="templateTitle != null" >
+        template_title,
+      </if>
+      <if test="templateContent != null" >
+        template_content,
+      </if>
+      <if test="templateType != null" >
+        template_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="templateId != null" >
+        #{templateId,jdbcType=INTEGER},
+      </if>
+      <if test="templateTitle != null" >
+        #{templateTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="templateContent != null" >
+        #{templateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="templateType != null" >
+        #{templateType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.TemplateInfo" >
+    update template_info
+    <set >
+      <if test="templateTitle != null" >
+        template_title = #{templateTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="templateContent != null" >
+        template_content = #{templateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="templateType != null" >
+        template_type = #{templateType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where template_id = #{templateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.TemplateInfo" >
+    update template_info
+    set template_title = #{templateTitle,jdbcType=VARCHAR},
+      template_content = #{templateContent,jdbcType=VARCHAR},
+      template_type = #{templateType,jdbcType=VARCHAR}
+    where template_id = #{templateId,jdbcType=INTEGER}
+  </update>
+</mapper>

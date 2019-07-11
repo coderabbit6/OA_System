@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.Communicate.mapper.CommunicateInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.CommunicateInfo" >
+    <id column="adddress_id" property="addressId" jdbcType="INTEGER" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="staff_name" property="staffName" jdbcType="VARCHAR" />
+    <result column="staff_phone" property="staffPhone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    adddress_id,staff_id,staff_name,staff_phone
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    
+		select  b.*
+		
+		from address_list b
+		
+		where b.adddress_id = #{communicateId,jdbcType=INTEGER}
+		
+		order by adddress_id  desc
+  </select>
+    <select id="getCommunicateInfoList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    
+		select  b.*
+
+		from address_list b
+
+		where  b.staff_id=#{info}
+		
+		order by adddress_id  desc
+  </select>
+  
+    <select id="getCommunicateInfoList1" resultMap="BaseResultMap" parameterType="com.bfw.po.CommunicateInfo" >
+	    
+		select  b.*
+
+		from address_list b
+		
+		where  b.staff_id=#{staffId} and b.staff_name like CONCAT('%',#{staffName},'%')
+		
+		order by adddress_id  desc
+  </select>
+  
+  
+  
+ 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from address_list
+    where adddress_id = #{communicateId,jdbcType=INTEGER}
+  </delete>
+
+<!--   <insert id="insert" parameterType="com.bfw.po.CommunicateInfo" >
+    insert into communicate_info (communicate_id, student_id, staff_id, 
+      communicate_time, communicate_content)
+    values (#{communicateId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}, 
+      #{communicateTime,jdbcType=TIMESTAMP}, #{communicateContent,jdbcType=VARCHAR})
+  </insert>
+   -->
+  <insert id="insertSelective" parameterType="com.bfw.po.CommunicateInfo" >
+    insert into address_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="addressId != null" >
+        adddress_id,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="staffName != null" >
+        staff_name,
+      </if>
+      <if test="staffPhone != null" >
+        staff_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="addressId != null" >
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="staffName != null" >
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffPhone != null" >
+        #{staffPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.CommunicateInfo" >
+    update address_list
+    <set >
+      <if test="staffName != null" >
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffPhone != null" >
+        staff_phone = #{staffPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where adddress_id = #{addressId,jdbcType=INTEGER}
+  </update>
+   <!-- 
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.CommunicateInfo" >
+    update communicate_info
+    set student_id = #{studentId,jdbcType=INTEGER},
+      staff_id = #{staffId,jdbcType=INTEGER},
+      communicate_time = #{communicateTime,jdbcType=TIMESTAMP},
+      communicate_content = #{communicateContent,jdbcType=VARCHAR}
+    where communicate_id = #{communicateId,jdbcType=INTEGER}
+  </update> -->
+</mapper>

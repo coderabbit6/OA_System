@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.inform.mapper.informActiveMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.informActive" >
+    <id column="active_id" property="activeId" jdbcType="INTEGER" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="active_name" property="activeName" jdbcType="VARCHAR" />
+<!--     <result column="active_state" property="activeState" jdbcType="INTEGER" />
+    <result column="active_start" property="activeStart" jdbcType="TIMESTAMP" />
+    <result column="active_end" property="activeEnd" jdbcType="TIMESTAMP" />
+    <result column="active_type" property="activeType" jdbcType="INTEGER" />
+    <result column="active_coste_emtimate" property="activeCosteEmtimate" jdbcType="DOUBLE" />
+    <result column="active_coste" property="activeCoste" jdbcType="DOUBLE" />
+    <result column="active_refect_estimate" property="activeRefectEstimate" jdbcType="INTEGER" />
+    <result column="active_student" property="activeStudent" jdbcType="VARCHAR" /> -->
+    <result column="active_content" property="activeContent" jdbcType="VARCHAR" />
+     <result column="staff_name" property="staffName" />
+   <!--   <result column="data_content" property="dataContent" /> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    active_id, staff_id, active_name, <!-- active_state, active_start, active_end, active_type, 
+    active_coste_emtimate, active_coste, active_refect_estimate, active_student,  -->active_content
+  </sql>
+  
+<!--     <select id="getMarketList" resultMap="BaseResultMap" parameterType="com.bfw.po.informActive" >
+  	 select x.*,y.data_content  from  (select  a.*,b.staff_name
+	 from inform_active  a,staff_info b
+	 where  a.staff_id =b.staff_id
+ 	 <if test="activeState!=null and activeState!=''">
+	 	and active_state=#{activeState}
+	 </if> 
+	 <if test="activeName!=null and activeName!=''">
+	 	and active_name like #{activeName}
+	 </if>
+	 ) x  left join data_dictionary y on x.active_state=y.data_id order by active_id  desc
+  </select> -->
+  
+      <select id="getMarketList" resultMap="BaseResultMap" parameterType="com.bfw.po.informActive" >
+  	 select  a.*,b.staff_name
+	 from inform_active  a,staff_info b
+	 where  a.staff_id =b.staff_id
+	 <if test="activeName!=null and activeName!=''">
+	 	and active_name like #{activeName}
+	 </if>
+	 order by active_id  desc
+  </select>
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from inform_active
+    where active_id = #{activeId,jdbcType=INTEGER} order by active_id  desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from inform_active
+    where active_id = #{activeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bfw.po.informActive" >
+    insert into inform_active (active_id, staff_id, active_name, 
+      <!-- active_state, active_start, active_end, 
+      active_type, active_coste_emtimate, active_coste, 
+      active_refect_estimate, active_student, --> active_content
+      )
+    values (#{activeId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}, #{activeName,jdbcType=VARCHAR}, 
+     <!--  #{activeState,jdbcType=INTEGER}, #{activeStart,jdbcType=TIMESTAMP}, #{activeEnd,jdbcType=TIMESTAMP}, 
+      #{activeType,jdbcType=INTEGER}, #{activeCosteEmtimate,jdbcType=DOUBLE}, #{activeCoste,jdbcType=DOUBLE}, 
+      #{activeRefectEstimate,jdbcType=INTEGER}, #{activeStudent,jdbcType=VARCHAR},  -->#{activeContent,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.informActive" >
+    insert into inform_active
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activeId != null" >
+        active_id,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="activeName != null" >
+        active_name,
+      </if>
+     <!--  <if test="activeState != null" >
+        active_state,
+      </if>
+      <if test="activeStart != null" >
+        active_start,
+      </if>
+      <if test="activeEnd != null" >
+        active_end,
+      </if>
+      <if test="activeType != null" >
+        active_type,
+      </if>
+      <if test="activeCosteEmtimate != null" >
+        active_coste_emtimate,
+      </if>
+      <if test="activeCoste != null" >
+        active_coste,
+      </if>
+      <if test="activeRefectEstimate != null" >
+        active_refect_estimate,
+      </if>
+      <if test="activeStudent != null" >
+        active_student,
+      </if> -->
+      <if test="activeContent != null" >
+        active_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activeId != null" >
+        #{activeId,jdbcType=INTEGER},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="activeName != null" >
+        #{activeName,jdbcType=VARCHAR},
+      </if>
+     <!--  <if test="activeState != null" >
+        #{activeState,jdbcType=INTEGER},
+      </if>
+      <if test="activeStart != null" >
+        #{activeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeEnd != null" >
+        #{activeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeType != null" >
+        #{activeType,jdbcType=INTEGER},
+      </if>
+      <if test="activeCosteEmtimate != null" >
+        #{activeCosteEmtimate,jdbcType=DOUBLE},
+      </if>
+      <if test="activeCoste != null" >
+        #{activeCoste,jdbcType=DOUBLE},
+      </if>
+      <if test="activeRefectEstimate != null" >
+        #{activeRefectEstimate,jdbcType=INTEGER},
+      </if>
+      <if test="activeStudent != null" >
+        #{activeStudent,jdbcType=VARCHAR},
+      </if> -->
+      <if test="activeContent != null" >
+        #{activeContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.informActive" >
+    update inform_active
+    <set >
+      <if test="staffId != null" >
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="activeName != null" >
+        active_name = #{activeName,jdbcType=VARCHAR},
+      </if>
+      <!-- <if test="activeState != null" >
+        active_state = #{activeState,jdbcType=INTEGER},
+      </if>
+      <if test="activeStart != null" >
+        active_start = #{activeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeEnd != null" >
+        active_end = #{activeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeType != null" >
+        active_type = #{activeType,jdbcType=INTEGER},
+      </if>
+      <if test="activeCosteEmtimate != null" >
+        active_coste_emtimate = #{activeCosteEmtimate,jdbcType=DOUBLE},
+      </if>
+      <if test="activeCoste != null" >
+        active_coste = #{activeCoste,jdbcType=DOUBLE},
+      </if>
+      <if test="activeRefectEstimate != null" >
+        active_refect_estimate = #{activeRefectEstimate,jdbcType=INTEGER},
+      </if>
+      <if test="activeStudent != null" >
+        active_student = #{activeStudent,jdbcType=VARCHAR},
+      </if> -->
+      <if test="activeContent != null" >
+        active_content = #{activeContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where active_id = #{activeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.informActive" >
+    update inform_active
+    set staff_id = #{staffId,jdbcType=INTEGER},
+      active_name = #{activeName,jdbcType=VARCHAR},
+      <!-- active_state = #{activeState,jdbcType=INTEGER},
+      active_start = #{activeStart,jdbcType=TIMESTAMP},
+      active_end = #{activeEnd,jdbcType=TIMESTAMP},
+      active_type = #{activeType,jdbcType=INTEGER},
+      active_coste_emtimate = #{activeCosteEmtimate,jdbcType=DOUBLE},
+      active_coste = #{activeCoste,jdbcType=DOUBLE},
+      active_refect_estimate = #{activeRefectEstimate,jdbcType=INTEGER},
+      active_student = #{activeStudent,jdbcType=VARCHAR}, -->
+      active_content = #{activeContent,jdbcType=VARCHAR}
+    where active_id = #{activeId,jdbcType=INTEGER}
+  </update>
+</mapper>

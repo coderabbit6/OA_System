@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.OrganizationWork.mapper.SyllabusInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.bfw.po.SyllabusInfo" >
+    <id column="syllabus_id" property="syllabusId" jdbcType="INTEGER" />
+    
+    <result column="syllabus_yi" property="syllabusYi" jdbcType="VARCHAR" />
+    <result column="syllabus_er" property="syllabusEr" jdbcType="VARCHAR" />
+    <result column="syllabus_san" property="syllabusSan" jdbcType="VARCHAR" />
+    <result column="syllabus_si" property="syllabusSi" jdbcType="VARCHAR" />
+    <result column="syllabus_wu" property="syllabusWu" jdbcType="VARCHAR" />
+    <result column="syllabus_liu" property="syllabusLiu" jdbcType="VARCHAR" />
+    <result column="syllabus_qi" property="syllabusQi" jdbcType="VARCHAR" />
+    <result column="is_uesd" property="isUesd" jdbcType="VARCHAR" />
+    <result column="syllabus_name" property="syllabusName" jdbcType="VARCHAR" />
+    <result column="syllabus_date" property="syllabusDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    syllabus_id, syllabus_yi, syllabus_er, syllabus_san, syllabus_si, syllabus_wu, syllabus_liu, 
+    syllabus_qi, is_uesd, syllabus_name, syllabus_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from syllabus_info
+    where syllabus_id = #{syllabusId,jdbcType=INTEGER} 
+    order by syllabus_id  desc
+  </select>
+  
+    <select id="getSyllabusList" resultMap="BaseResultMap" parameterType="com.bfw.po.SyllabusInfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from syllabus_info
+    <!--  is_uesd='1'  -->
+    <if test="syllabusName!=null and syllabusName!=''">
+    where syllabus_name like CONCAT('%',#{syllabusName},'%') 
+    <!-- and syllabus_name= #{syllabusName} -->
+    </if>
+    order by syllabus_id  desc
+  </select>
+  
+   <select id="getSyllabusList1" resultMap="BaseResultMap" parameterType="com.bfw.po.SyllabusInfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from syllabus_info
+    where is_uesd=#{isUesd} 
+    <!--  is_uesd='1'  -->
+    <if test="syllabusName!=null and syllabusName!=''">
+    and syllabus_name like CONCAT('%',#{syllabusName},'%') 
+    <!-- and syllabus_name= #{syllabusName} -->
+    </if>
+    order by syllabus_id  desc
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from syllabus_info
+    where syllabus_id = #{syllabusId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bfw.po.SyllabusInfo" >
+    insert into syllabus_info (syllabus_id, syllabus_yi, syllabus_er, 
+      syllabus_san, syllabus_si, syllabus_wu, 
+      syllabus_liu, syllabus_qi, is_uesd, 
+      syllabus_name,syllabus_date)
+    values (#{syllabusId,jdbcType=INTEGER}, #{syllabusYi,jdbcType=VARCHAR}, #{syllabusEr,jdbcType=VARCHAR}, 
+      #{syllabusSan,jdbcType=VARCHAR}, #{syllabusSi,jdbcType=VARCHAR}, #{syllabusWu,jdbcType=VARCHAR}, 
+      #{syllabusLiu,jdbcType=VARCHAR}, #{syllabusQi,jdbcType=VARCHAR}, #{isUesd,jdbcType=VARCHAR}, 
+      #{syllabusName,jdbcType=VARCHAR},#{syllabusDate,jdbcType=TIMESTAMP},)
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.SyllabusInfo" >
+    insert into syllabus_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="syllabusId != null" >
+        syllabus_id,
+      </if>
+
+      <if test="syllabusYi != null" >
+        syllabus_yi,
+      </if>
+      <if test="syllabusEr != null" >
+        syllabus_er,
+      </if>
+      <if test="syllabusSan != null" >
+        syllabus_san,
+      </if>
+      <if test="syllabusSi != null" >
+        syllabus_si,
+      </if>
+      <if test="syllabusWu != null" >
+        syllabus_wu,
+      </if>
+      <if test="syllabusLiu != null" >
+        syllabus_liu,
+      </if>
+      <if test="syllabusQi != null" >
+        syllabus_qi,
+      </if>
+      <if test="isUesd != null" >
+        is_uesd,
+      </if>
+      <if test="syllabusName != null" >
+        syllabus_name,
+      </if>
+             <if test="syllabusDate != null" >
+        syllabus_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="syllabusId != null" >
+        #{syllabusId,jdbcType=INTEGER},
+      </if>
+
+      <if test="syllabusYi != null" >
+        #{syllabusYi,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusEr != null" >
+        #{syllabusEr,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusSan != null" >
+        #{syllabusSan,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusSi != null" >
+        #{syllabusSi,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusWu != null" >
+        #{syllabusWu,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusLiu != null" >
+        #{syllabusLiu,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusQi != null" >
+        #{syllabusQi,jdbcType=VARCHAR},
+      </if>
+      <if test="isUesd != null" >
+        #{isUesd,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusName != null" >
+        #{syllabusName,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusDate != null" >
+        #{syllabusDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.SyllabusInfo" >
+    update syllabus_info
+    <set >
+      <if test="syllabusYi != null" >
+        syllabus_yi = #{syllabusYi,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusEr != null" >
+        syllabus_er = #{syllabusEr,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusSan != null" >
+        syllabus_san = #{syllabusSan,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusSi != null" >
+        syllabus_si = #{syllabusSi,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusWu != null" >
+        syllabus_wu = #{syllabusWu,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusLiu != null" >
+        syllabus_liu = #{syllabusLiu,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusQi != null" >
+        syllabus_qi = #{syllabusQi,jdbcType=VARCHAR},
+      </if>
+      <if test="isUesd != null" >
+        is_uesd = #{isUesd,jdbcType=VARCHAR},
+      </if>
+      <if test="syllabusName != null" >
+        syllabus_name = #{syllabusName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where syllabus_id = #{syllabusId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.SyllabusInfo" >
+    update syllabus_info
+    set syllabus_yi = #{syllabusYi,jdbcType=VARCHAR},
+      syllabus_er = #{syllabusEr,jdbcType=VARCHAR},
+      syllabus_san = #{syllabusSan,jdbcType=VARCHAR},
+      syllabus_si = #{syllabusSi,jdbcType=VARCHAR},
+      syllabus_wu = #{syllabusWu,jdbcType=VARCHAR},
+      syllabus_liu = #{syllabusLiu,jdbcType=VARCHAR},
+      syllabus_qi = #{syllabusQi,jdbcType=VARCHAR},
+      is_uesd = #{isUesd,jdbcType=VARCHAR},
+      syllabus_name = #{syllabusName,jdbcType=VARCHAR}
+    where syllabus_id = #{syllabusId,jdbcType=INTEGER}
+  </update>
+</mapper>

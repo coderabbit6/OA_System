@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bfw.system.mapper.StaffInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.bfw.po.StaffInfo" >
+    <id column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="staff_name" property="staffName" jdbcType="VARCHAR" />
+    <result column="staff_sex" property="staffSex" jdbcType="VARCHAR" />
+    <result column="staff_age" property="staffAge" jdbcType="INTEGER" />
+    <result column="staff_native_place" property="staffNativePlace" jdbcType="VARCHAR" />
+    <result column="staff_idcard" property="staffIdcard" jdbcType="VARCHAR" />
+    <result column="staff_brithday" property="staffBrithday" jdbcType="TIMESTAMP" />
+    <result column="staff_office_phone" property="staffOfficePhone" jdbcType="VARCHAR" />
+    <result column="staff_mobile_phone" property="staffMobilePhone" jdbcType="VARCHAR" />
+    <result column="staff_eamil" property="staffEamil" jdbcType="VARCHAR" />
+    <result column="staff_addr" property="staffAddr" jdbcType="VARCHAR" />
+    <result column="staff_qq" property="staffQq" jdbcType="VARCHAR" />
+    <result column="staff_entry_time" property="staffEntryTime" jdbcType="TIMESTAMP" />
+    <result column="staff_eduction_level" property="staffEductionLevel" jdbcType="VARCHAR" />
+    <result column="staff_remark" property="staffRemark" jdbcType="VARCHAR" />
+    <result column="staff_state" property="staffState" jdbcType="VARCHAR" />
+    <result column="user_number" property="userNumber" jdbcType="VARCHAR" />
+    <result column="user_passowrd" property="userPassowrd" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    
+    <result column="data_id" property="dataId" jdbcType="INTEGER" />
+    <result column="data_content" property="dataName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+<!-- 状态的报表 -->
+<select id="getSateList"  resultType="java.util.HashMap">
+	select count(b.data_content) total ,b.data_content
+	from  staff_info a,data_dictionary b
+	where a.staff_state =b.data_id
+	group by b.data_content 
+</select>
+
+  <select id="getStaffInfoList" resultMap="BaseResultMap" parameterType="com.bfw.po.StaffInfo">
+    select   a.*,b.*
+    <include refid="Base_Column_List" />
+    from staff_info a,data_dictionary b where a.staff_state !='0' and a.staff_state = b.data_id
+
+   		<if test="staffId != null and staffId!=''" >
+       		 and a.staff_id=#{staffId,jdbcType=INTEGER}
+        </if>
+        <if test="staffName != null and staffName!='' ">
+       		 and a.staff_name like CONCAT('%',#{staffName},'%')
+        </if>
+        <if test="staffMobilePhone != null and staffMobilePhone!='' ">
+       		 and a.staff_mobile_phone like CONCAT('%',#{staffMobilePhone},'%')
+        </if>
+         <if test="userNumber != null and userNumber!='' ">
+       		 and a.user_number=#{userNumber}
+        </if>
+        <if test="userPassowrd != null and userPassowrd!='' ">
+       		 and a.user_passowrd=#{userPassowrd} 
+        </if>
+          <if test="dataName != null and dataName!='' ">
+       		 and b.data_content=#{dataName} 
+        </if>
+         <if test="staffState != null and staffState!='' ">
+       		 and a.staff_state=#{staffState} 
+        </if>
+
+    order by a.staff_id  desc
+    
+  </select>
+  
+    <select id="getStaffList" resultMap="BaseResultMap" parameterType="com.bfw.po.StaffInfo">
+    select a.*,b.role_name
+    from staff_info a   left join role_info b  on  a.role_id = b.role_id and   a.staff_state !='0'
+
+   		<if test="staffId != null and staffId!=''" >
+       		 and a.staff_id=#{staffId,jdbcType=INTEGER}
+        </if>
+        <if test="staffName != null and staffName!='' ">
+       		 and a.staff_name like CONCAT('%',#{staffName},'%')
+        </if>
+        <if test="staffMobilePhone != null and staffMobilePhone!='' ">
+       		 and a.staff_mobile_phone like CONCAT('%',#{staffMobilePhone} ,'%')
+        </if>
+         <if test="staffState != null and staffState!='' ">
+       		 and a.staff_state=#{staffState}
+        </if>
+  
+    order by a.staff_id  desc
+    
+  </select>
+  
+   <sql id="Base_Column_List" >
+    staff_id, role_id, staff_name, staff_sex, staff_age, staff_native_place, staff_idcard, 
+    staff_brithday, staff_office_phone, staff_mobile_phone, staff_eamil, staff_addr, 
+    staff_qq, staff_entry_time, staff_eduction_level, staff_remark, staff_state, user_number, 
+    user_passowrd
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select a.*,b.*
+<!--     <include refid="Base_Column_List" /> -->
+    from staff_info a,data_dictionary b
+    where a.staff_id = #{staffId,jdbcType=INTEGER} and a.staff_state = b.data_id
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from staff_info
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.bfw.po.StaffInfo" >
+    insert into staff_info (staff_id, role_id, staff_name, 
+      staff_sex, staff_age, staff_native_place, 
+      staff_idcard, staff_brithday, staff_office_phone, 
+      staff_mobile_phone, staff_eamil, staff_addr, 
+      staff_qq, staff_entry_time, staff_eduction_level, 
+      staff_remark, staff_state, user_number, 
+      user_passowrd)
+    values (#{staffId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{staffName,jdbcType=VARCHAR}, 
+      #{staffSex,jdbcType=VARCHAR}, #{staffAge,jdbcType=INTEGER}, #{staffNativePlace,jdbcType=VARCHAR}, 
+      #{staffIdcard,jdbcType=VARCHAR}, #{staffBrithday,jdbcType=TIMESTAMP}, #{staffOfficePhone,jdbcType=VARCHAR}, 
+      #{staffMobilePhone,jdbcType=VARCHAR}, #{staffEamil,jdbcType=VARCHAR}, #{staffAddr,jdbcType=VARCHAR}, 
+      #{staffQq,jdbcType=VARCHAR}, #{staffEntryTime,jdbcType=TIMESTAMP}, #{staffEductionLevel,jdbcType=VARCHAR}, 
+      #{staffRemark,jdbcType=VARCHAR}, #{staffState,jdbcType=VARCHAR}, #{userNumber,jdbcType=VARCHAR}, 
+      #{userPassowrd,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bfw.po.StaffInfo" >
+    insert into staff_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="staffName != null" >
+        staff_name,
+      </if>
+      <if test="staffSex != null" >
+        staff_sex,
+      </if>
+      <if test="staffAge != null" >
+        staff_age,
+      </if>
+      <if test="staffNativePlace != null" >
+        staff_native_place,
+      </if>
+      <if test="staffIdcard != null" >
+        staff_idcard,
+      </if>
+      <if test="staffBrithday != null" >
+        staff_brithday,
+      </if>
+      <if test="staffOfficePhone != null" >
+        staff_office_phone,
+      </if>
+      <if test="staffMobilePhone != null" >
+        staff_mobile_phone,
+      </if>
+      <if test="staffEamil != null" >
+        staff_eamil,
+      </if>
+      <if test="staffAddr != null" >
+        staff_addr,
+      </if>
+      <if test="staffQq != null" >
+        staff_qq,
+      </if>
+      <if test="staffEntryTime != null" >
+        staff_entry_time,
+      </if>
+      <if test="staffEductionLevel != null" >
+        staff_eduction_level,
+      </if>
+      <if test="staffRemark != null" >
+        staff_remark,
+      </if>
+      <if test="staffState != null" >
+        staff_state,
+      </if>
+      <if test="userNumber != null" >
+        user_number,
+      </if>
+      <if test="userPassowrd != null" >
+        user_passowrd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="staffName != null" >
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffSex != null" >
+        #{staffSex,jdbcType=VARCHAR},
+      </if>
+      <if test="staffAge != null" >
+        #{staffAge,jdbcType=INTEGER},
+      </if>
+      <if test="staffNativePlace != null" >
+        #{staffNativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="staffIdcard != null" >
+        #{staffIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="staffBrithday != null" >
+        #{staffBrithday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffOfficePhone != null" >
+        #{staffOfficePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="staffMobilePhone != null" >
+        #{staffMobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="staffEamil != null" >
+        #{staffEamil,jdbcType=VARCHAR},
+      </if>
+      <if test="staffAddr != null" >
+        #{staffAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="staffQq != null" >
+        #{staffQq,jdbcType=VARCHAR},
+      </if>
+      <if test="staffEntryTime != null" >
+        #{staffEntryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffEductionLevel != null" >
+        #{staffEductionLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="staffRemark != null" >
+        #{staffRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="staffState != null" >
+        #{staffState,jdbcType=VARCHAR},
+      </if>
+      <if test="userNumber != null" >
+        #{userNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassowrd != null" >
+        #{userPassowrd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bfw.po.StaffInfo" >
+    update staff_info
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="staffName != null" >
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffSex != null" >
+        staff_sex = #{staffSex,jdbcType=VARCHAR},
+      </if>
+      <if test="staffAge != null" >
+        staff_age = #{staffAge,jdbcType=INTEGER},
+      </if>
+      <if test="staffNativePlace != null" >
+        staff_native_place = #{staffNativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="staffIdcard != null" >
+        staff_idcard = #{staffIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="staffBrithday != null" >
+        staff_brithday = #{staffBrithday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffOfficePhone != null" >
+        staff_office_phone = #{staffOfficePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="staffMobilePhone != null" >
+        staff_mobile_phone = #{staffMobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="staffEamil != null" >
+        staff_eamil = #{staffEamil,jdbcType=VARCHAR},
+      </if>
+      <if test="staffAddr != null" >
+        staff_addr = #{staffAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="staffQq != null" >
+        staff_qq = #{staffQq,jdbcType=VARCHAR},
+      </if>
+      <if test="staffEntryTime != null" >
+        staff_entry_time = #{staffEntryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffEductionLevel != null" >
+        staff_eduction_level = #{staffEductionLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="staffRemark != null" >
+        staff_remark = #{staffRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="staffState != null" >
+        staff_state = #{staffState,jdbcType=VARCHAR},
+      </if>
+      <if test="userNumber != null" >
+        user_number = #{userNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassowrd != null" >
+        user_passowrd = #{userPassowrd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bfw.po.StaffInfo" >
+    update staff_info
+    set role_id = #{roleId,jdbcType=INTEGER},
+      staff_name = #{staffName,jdbcType=VARCHAR},
+      staff_sex = #{staffSex,jdbcType=VARCHAR},
+      staff_age = #{staffAge,jdbcType=INTEGER},
+      staff_native_place = #{staffNativePlace,jdbcType=VARCHAR},
+      staff_idcard = #{staffIdcard,jdbcType=VARCHAR},
+      staff_brithday = #{staffBrithday,jdbcType=TIMESTAMP},
+      staff_office_phone = #{staffOfficePhone,jdbcType=VARCHAR},
+      staff_mobile_phone = #{staffMobilePhone,jdbcType=VARCHAR},
+      staff_eamil = #{staffEamil,jdbcType=VARCHAR},
+      staff_addr = #{staffAddr,jdbcType=VARCHAR},
+      staff_qq = #{staffQq,jdbcType=VARCHAR},
+      staff_entry_time = #{staffEntryTime,jdbcType=TIMESTAMP},
+      staff_eduction_level = #{staffEductionLevel,jdbcType=VARCHAR},
+      staff_remark = #{staffRemark,jdbcType=VARCHAR},
+      staff_state = #{staffState,jdbcType=VARCHAR},
+      user_number = #{userNumber,jdbcType=VARCHAR},
+      user_passowrd = #{userPassowrd,jdbcType=VARCHAR}
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </update>
+
+</mapper>
